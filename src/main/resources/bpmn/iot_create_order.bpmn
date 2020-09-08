@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1t69b7f" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.2.0">
+  <bpmn:process id="iot_create_order" name="Upload Order" isExecutable="true" camunda:versionTag="1.1">
+    <bpmn:startEvent id="StartEvent_1" name="Request Retrieved">
+      <bpmn:outgoing>Flow_0wdup84</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1v92kf2" sourceRef="complete_order_activity" targetRef="Activity_0j284an" />
+    <bpmn:endEvent id="order_completed" name="Order completed">
+      <bpmn:incoming>Flow_1nrqp4o</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1nrqp4o" sourceRef="Activity_0j284an" targetRef="order_completed" />
+    <bpmn:serviceTask id="complete_order_activity" name="Complete Order" camunda:asyncBefore="true" camunda:delegateExpression="#{completeOrderAction}">
+      <bpmn:incoming>Flow_05qhvzb</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v92kf2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0j284an" name="Generate Usages" camunda:asyncBefore="true" camunda:delegateExpression="${generateUsagesAction}">
+      <bpmn:incoming>Flow_1v92kf2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1nrqp4o</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${order.getOrderItemList()}" camunda:elementVariable="orderItem" />
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="order_cancelled" name="Order Cancelled">
+      <bpmn:incoming>Flow_1ouhswj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1ouhswj" sourceRef="Activity_1yus09f" targetRef="order_cancelled" />
+    <bpmn:serviceTask id="Activity_1yus09f" name="Cancel Order" camunda:asyncBefore="true" camunda:delegateExpression="#{cancelOrderAction}">
+      <bpmn:incoming>Flow_08fcs37</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ouhswj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0n54vjd" name="Call 3rd party" camunda:asyncBefore="true" camunda:delegateExpression="#{callThirdPartyAction}">
+      <bpmn:incoming>Flow_0a1bo97</bpmn:incoming>
+      <bpmn:outgoing>Flow_05qhvzb</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_05qhvzb" sourceRef="Activity_0n54vjd" targetRef="complete_order_activity" />
+    <bpmn:boundaryEvent id="Event_0qnw6e8" attachedToRef="Activity_0n54vjd">
+      <bpmn:outgoing>Flow_08fcs37</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0kawi3b" errorRef="Error_1ck0tir" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_08fcs37" sourceRef="Event_0qnw6e8" targetRef="Activity_1yus09f" />
+    <bpmn:serviceTask id="Activity_0gpxapz" name="Create Order" camunda:asyncAfter="true" camunda:delegateExpression="${createOrderAction}">
+      <bpmn:incoming>Flow_15vwh9y</bpmn:incoming>
+      <bpmn:outgoing>Flow_0a1bo97</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0a1bo97" sourceRef="Activity_0gpxapz" targetRef="Activity_0n54vjd" />
+    <bpmn:sequenceFlow id="Flow_0wdup84" sourceRef="StartEvent_1" targetRef="Activity_0vz071f" />
+    <bpmn:sequenceFlow id="Flow_15vwh9y" sourceRef="Activity_0vz071f" targetRef="Activity_0gpxapz" />
+    <bpmn:serviceTask id="Activity_0vz071f" name="Get Account" camunda:delegateExpression="#{getAccountAction}">
+      <bpmn:incoming>Flow_0wdup84</bpmn:incoming>
+      <bpmn:outgoing>Flow_15vwh9y</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:textAnnotation id="TextAnnotation_0n6apaz">
+      <bpmn:text>For each order item in order</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0iheor6" sourceRef="Activity_0j284an" targetRef="TextAnnotation_0n6apaz" />
+  </bpmn:process>
+  <bpmn:error id="Error_1ck0tir" name="AnyError" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="iot_create_order">
+      <bpmndi:BPMNEdge id="Flow_15vwh9y_di" bpmnElement="Flow_15vwh9y">
+        <di:waypoint x="210" y="280" />
+        <di:waypoint x="210" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wdup84_di" bpmnElement="Flow_0wdup84">
+        <di:waypoint x="210" y="158" />
+        <di:waypoint x="210" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0a1bo97_di" bpmnElement="Flow_0a1bo97">
+        <di:waypoint x="210" y="420" />
+        <di:waypoint x="210" y="475" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08fcs37_di" bpmnElement="Flow_08fcs37">
+        <di:waypoint x="220" y="573" />
+        <di:waypoint x="220" y="690" />
+        <di:waypoint x="420" y="690" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05qhvzb_di" bpmnElement="Flow_05qhvzb">
+        <di:waypoint x="260" y="515" />
+        <di:waypoint x="420" y="515" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ouhswj_di" bpmnElement="Flow_1ouhswj">
+        <di:waypoint x="520" y="690" />
+        <di:waypoint x="622" y="690" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nrqp4o_di" bpmnElement="Flow_1nrqp4o">
+        <di:waypoint x="810" y="515" />
+        <di:waypoint x="912" y="515" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v92kf2_di" bpmnElement="Flow_1v92kf2">
+        <di:waypoint x="520" y="515" />
+        <di:waypoint x="710" y="515" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="192" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="186" y="84.5" width="48" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_17rp2cw_di" bpmnElement="order_completed">
+        <dc:Bounds x="912" y="497" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="890" y="540" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05q9co1_di" bpmnElement="complete_order_activity">
+        <dc:Bounds x="420" y="475" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gsqi19_di" bpmnElement="Activity_0j284an">
+        <dc:Bounds x="710" y="475" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_09ubob5_di" bpmnElement="order_cancelled">
+        <dc:Bounds x="622" y="672" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="600" y="715" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1eif596_di" bpmnElement="Activity_1yus09f">
+        <dc:Bounds x="420" y="650" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0umtw2s_di" bpmnElement="Activity_0n54vjd">
+        <dc:Bounds x="160" y="475" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wksct4_di" bpmnElement="Activity_0gpxapz">
+        <dc:Bounds x="160" y="340" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gqn32k_di" bpmnElement="Activity_0vz071f">
+        <dc:Bounds x="160" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0n6apaz_di" bpmnElement="TextAnnotation_0n6apaz">
+        <dc:Bounds x="810" y="390" width="123" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1dafhnc_di" bpmnElement="Event_0qnw6e8">
+        <dc:Bounds x="202" y="537" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0iheor6_di" bpmnElement="Association_0iheor6">
+        <di:waypoint x="802" y="476" />
+        <di:waypoint x="851" y="430" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1hjtu4w" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.1">
+  <bpmn:process id="script_process" name="Script Process" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1sr6fb4</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1sr6fb4" sourceRef="StartEvent_1" targetRef="script_procadfa" />
+    <bpmn:endEvent id="Event_1h9emkp">
+      <bpmn:incoming>Flow_005e9yz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_005e9yz" sourceRef="script_procadfa" targetRef="Event_1h9emkp" />
+    <bpmn:scriptTask id="script_procadfa" name="Do SMTH" scriptFormat="groovy">
+      <bpmn:incoming>Flow_1sr6fb4</bpmn:incoming>
+      <bpmn:outgoing>Flow_005e9yz</bpmn:outgoing>
+      <bpmn:script>import java.util.logging.Logger
+
+Logger logger = Logger.getLogger("com.example.camundabpmerror.Script")
+logger.info("Executing script Call Third party ")
+throw new RuntimeException("Artifical Error")</bpmn:script>
+    </bpmn:scriptTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="script_process">
+      <bpmndi:BPMNEdge id="Flow_1sr6fb4_di" bpmnElement="Flow_1sr6fb4">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_005e9yz_di" bpmnElement="Flow_005e9yz">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="432" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1h9emkp_di" bpmnElement="Event_1h9emkp">
+        <dc:Bounds x="432" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0255d3n_di" bpmnElement="script_procadfa">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
