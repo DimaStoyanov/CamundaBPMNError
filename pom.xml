@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <camunda-starter-version>3.4.2</camunda-starter-version>
+        <camunda-starter-version>3.4.4</camunda-starter-version>
     </properties>
 
     <dependencies>

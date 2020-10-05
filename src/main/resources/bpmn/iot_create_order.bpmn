@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1t69b7f" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.2.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1t69b7f" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.1">
   <bpmn:process id="iot_create_order" name="Upload Order" isExecutable="true" camunda:versionTag="1.1">
     <bpmn:startEvent id="StartEvent_1" name="Request Retrieved">
       <bpmn:outgoing>Flow_0wdup84</bpmn:outgoing>
@@ -52,7 +52,7 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0iheor6" sourceRef="Activity_0j284an" targetRef="TextAnnotation_0n6apaz" />
   </bpmn:process>
-  <bpmn:error id="Error_1ck0tir" name="AnyError" />
+  <bpmn:error id="Error_1ck0tir" name="AnyError" errorCode="ThirdPartyError" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="iot_create_order">
       <bpmndi:BPMNEdge id="Flow_15vwh9y_di" bpmnElement="Flow_15vwh9y">
